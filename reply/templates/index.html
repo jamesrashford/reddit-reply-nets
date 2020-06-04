@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %} ReplyNET for Reddit {% endblock title %}
+
+{% block content %}
+  <div class="jumbotron">
+    <form method="GET">
+      <h1 class="display-4">Generate reply networks</h1>
+      <p class="lead">Generate reply networks by entering a subreddit and search by post.</p>
+      <hr class="my-4">
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <input type="text" class="form-control form-control-lg" name="subreddit" placeholder="Enter a subreddit e.g. r/aww">
+        </div>
+        <div class="col-sm-2">
+          <button type="submit" class="btn btn-primary btn-lg">Find Posts</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  {% if subreddit %}
+  <h2>Recent posts in r/{{ subreddit.display_name }}</h2>
+  <h5>Sorting by <span class="badge badge-secondary">{{ sort }}</span> or <span class="badge badge-secondary">{{ time }}</span></h5>
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" href="/?subreddit={{ subreddit.display_name }}&sort=hot">Hot</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/?subreddit={{ subreddit.display_name }}&sort=new">New</a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Top</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=top&time_filter=hour">Hour</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=top&time_filter=day">Day</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=top&time_filter=week">Week</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=top&time_filter=month">Month</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=top&time_filter=year">Year</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=top&time_filter=all">All</a>
+      </div>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Controversial</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=controversial&time_filter=hour">Hour</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=controversial&time_filter=day">Day</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=controversial&time_filter=week">Week</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=controversial&time_filter=month">Month</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=controversial&time_filter=year">Year</a>
+        <a class="dropdown-item" href="/?subreddit={{ subreddit.display_name }}&sort=controversial&time_filter=all">All</a>
+      </div>
+    </li>
+  </ul>
+  <hr/>
+  {% for submission in submissions %}
+  <div class="col-md-auto">
+    <h4><a href="/network?id={{ submission.id }}">{{ submission.title }}</a></h4>
+    <h6>Score: <span class="badge badge-info">{{ submission.score }}</span> Num of Comments: <span class="badge badge-info">{{ submission.num_comments }}</span> Author: <a href="https://reddit.com/u/{{ submission.author.name }}" class="badge badge-light">{{ submission.author.name }}</a></h6>
+    <br/>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+{% endblock content %}
